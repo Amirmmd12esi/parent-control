@@ -9,13 +9,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Set up Node.js 22
+    - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '22'
+        node-version: '20'
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -35,23 +34,8 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x android/gradlew
 
-    - name: Configure Gradle to use mirrors
-      run: |
-        mkdir -p ~/.gradle
-        echo "allprojects {
-          repositories {
-            maven { url 'https://maven.aliyun.com/repository/google' }
-            maven { url 'https://maven.aliyun.com/repository/central' }
-            maven { url 'https://maven.aliyun.com/repository/public' }
-            google()
-            mavenCentral()
-          }
-        }" > ~/.gradle/init.gradle
-
-    - name: Build APK with Gradle
-      run: |
-        cd android
-        ./gradlew assembleDebug --stacktrace --no-daemon
+    - name: Build APK
+      run: cd android && ./gradlew assembleDebug --stacktrace
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
