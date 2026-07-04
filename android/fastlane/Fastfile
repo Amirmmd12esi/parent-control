@@ -1,0 +1,18 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build Android APK"
+  lane :build_android do
+    gradle(
+      task: 'assemble',
+      build_type: 'Release',
+      gradle_path: './gradlew',
+      properties: {
+        "android.injected.signing.store.file" => ENV['KEYSTORE_FILE'],
+        "android.injected.signing.store.password" => ENV['KEYSTORE_PASSWORD'],
+        "android.injected.signing.key.alias" => ENV['KEY_ALIAS'],
+        "android.injected.signing.key.password" => ENV['KEY_PASSWORD'],
+      }
+    )
+  end
+end
